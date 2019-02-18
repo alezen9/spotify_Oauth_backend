@@ -8,11 +8,9 @@ const keys = require('./config/keys');
 const cookieSession = require('cookie-session');
 var cors = require('cors');
 
-
 const app = express();
 
 app.use(cors());
-
 
 app.use(cookieSession({
     maxAge: 24*60*60*1000, //in milliseconds (1 day here)
