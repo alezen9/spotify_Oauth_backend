@@ -8,7 +8,8 @@ const userSchema = new Schema({
     type: String,
     accessToken: String,
     refreshToken: String,
-    accessTokenUntil: Number
+    accessTokenUntil: Number,
+    country: String
 });
 
 const User = mongoose.model('user',userSchema);

@@ -22,6 +22,7 @@
     "passport-github2": "^0.1.11",
     "passport-google-oauth20": "^1.0.0",
     "passport-spotify": "^1.0.1",
+    "query-string": "^6.2.0",
     "querystring": "^0.2.0"
   }
 }

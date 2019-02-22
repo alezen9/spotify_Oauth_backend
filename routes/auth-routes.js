@@ -19,7 +19,7 @@ router.get('/logout', (req, res) => {
 
 //auth spotify
 router.get('/spotify', passport.authenticate('spotify', {
-    scope: ['user-read-email', 'user-read-private', 'user-top-read']
+    scope: ['user-read-email', 'user-read-private', 'user-top-read', "streaming", "user-read-birthdate"]
 }));
 
 //callback route for spotify to redirect to
@@ -28,7 +28,8 @@ router.get('/spotify/redirect', passport.authenticate('spotify'), (req, res) => 
     let userFiltered = {
         spotifyId: req.user.spotifyId,
         type: req.user.type,
-        displayName: req.user.displayName
+        displayName: req.user.displayName,
+        country: req.user.country
     }
     // send userFiltered parameters in uri to docoding page
     res.redirect(encodeURI(FRONTEND_DECODING_PAGE_URL + encodeURIComponent(JSON.stringify(userFiltered))));
@@ -79,10 +80,12 @@ router.get('/refresh/:id', (req, res) => {
                         },
                         { upsert: true }
                     )
-                    let A_TOKEN = {
-                        access_token: data.access_token
-                    }
-                    res.send(JSON.stringify(A_TOKEN));
+                        .then(userResponse => {
+                            let A_TOKEN = {
+                                access_token: data.access_token
+                            }
+                            res.send(JSON.stringify(A_TOKEN));
+                        })
                 })
                 .catch(err => res.send(JSON.stringify(err)))
         })
