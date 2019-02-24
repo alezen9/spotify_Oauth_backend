@@ -9,10 +9,10 @@ const FRONTEND_DECODING_PAGE_URL = keys.frontend_decode;
 
 //auth logout
 router.get('/logout', (req, res) => {
-    let userName = req.user.displayName;
-    console.log(userName + ' is logging out...');
+    const { displayName } = req.user;
+    console.log(displayName + ' is logging out...');
     req.logout();
-    console.log(userName + ' logged out');
+    console.log(displayName + ' logged out');
     res.redirect(FRONTEND_HOME_URL);
 });
 
@@ -24,12 +24,13 @@ router.get('/spotify', passport.authenticate('spotify', {
 
 //callback route for spotify to redirect to
 router.get('/spotify/redirect', passport.authenticate('spotify'), (req, res) => {
-    console.log(req.user.displayName + ' logged in');
+    const { spotifyId, type, displayName, country } = req.user;
+    console.log(displayName + ' logged in');
     let userFiltered = {
-        spotifyId: req.user.spotifyId,
-        type: req.user.type,
-        displayName: req.user.displayName,
-        country: req.user.country
+        spotifyId: spotifyId,
+        type: type,
+        displayName: displayName,
+        country: country
     }
     // send userFiltered parameters in uri to docoding page
     res.redirect(encodeURI(FRONTEND_DECODING_PAGE_URL + encodeURIComponent(JSON.stringify(userFiltered))));

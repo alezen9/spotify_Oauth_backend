@@ -24,41 +24,39 @@ passport.use(
         //check if user exists in database
         User.findOne({
             spotifyId: profile.id
-        }).then((currentUser) => {
-            if (currentUser) {
-                if (currentUser.type !== profile._json.product) {
-                    // update subscription
-                    User.updateOne(
-                        { spotifyId: currentUser.spotifyId },
-                        {
-                            $set: {
-                                type: profile._json.product
+        })
+            .then((currentUser) => {
+                if (currentUser) {
+                    if (currentUser.type !== profile._json.product) {
+                        // update subscription
+                        User.updateOne(
+                            { spotifyId: currentUser.spotifyId },
+                            {
+                                $set: {
+                                    type: profile._json.product
+                                },
                             },
-                        },
-                        { upsert: true }
-                    )
-                        .then(userResponse => {
-                            currentUser.type = profile._json.product;
-                        })
+                            { upsert: true }
+                        )
+                            .then(userResponse => { currentUser.type = profile._json.product; })
+                        done(null, currentUser);
+                    }
                     done(null, currentUser);
+                } else {
+                    //create new user and save it
+                    var d = new Date();
+                    new User({
+                        displayName: profile.displayName,
+                        spotifyId: profile.id,
+                        email: profile._json.email,
+                        type: profile._json.product,
+                        accessToken: accessToken,
+                        refreshToken: refreshToken,
+                        accessTokenUntil: (d.getTime() / 1000) + 3300,
+                        country: profile._json.country
+                    }).save()
+                        .then((newUser) => { done(null, newUser); })
                 }
-                done(null, currentUser);
-            } else {
-                //create new user and save it
-                var d = new Date();
-                new User({
-                    displayName: profile.displayName,
-                    spotifyId: profile.id,
-                    email: profile._json.email,
-                    type: profile._json.product,
-                    accessToken: accessToken,
-                    refreshToken: refreshToken,
-                    accessTokenUntil: (d.getTime() / 1000) + 3300,
-                    country: profile._json.country
-                }).save().then((newUser) => {
-                    done(null, newUser);
-                })
-            }
-        });
+            });
     })
 );

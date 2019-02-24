@@ -6,7 +6,7 @@ const passportSetup = require('./config/passport-setup');
 const mongoose = require('mongoose');
 const keys = require('./config/keys');
 const cookieSession = require('cookie-session');
-var cors = require('cors');
+const cors = require('cors');
 const bodyParser = require("body-parser");
 
 const app = express();

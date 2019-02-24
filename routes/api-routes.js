@@ -8,23 +8,22 @@ const BACKEND_REFRESH_TOKEN_URL = keys.backend_refresh_token;
 
 // get top tracks or artists or genre
 router.get('/top/:type/:id', (req, res) => {
-    if (req.params.type !== 'genre') {
-        fetch(BACKEND_REFRESH_TOKEN_URL + req.params.id)
+    const {type, id} = req.params;
+    if (type !== 'genre') {
+        fetch(BACKEND_REFRESH_TOKEN_URL + id)
             .then(response => response.json())
             .then(A_TOKEN => {
-                fetch('https://api.spotify.com/v1/me/top/' + req.params.type, {
+                fetch('https://api.spotify.com/v1/me/top/' + type, {
                     headers: {
                         'Authorization': 'Bearer ' + A_TOKEN.access_token,
                     }
                 })
                     .then(res => res.json())
-                    .then(items => {
-                        res.send(JSON.stringify(items))
-                    })
+                    .then(items => { res.send(JSON.stringify(items)) })
                     .catch(err => res.send(JSON.stringify(err)));
             })
     } else {
-        fetch(BACKEND_REFRESH_TOKEN_URL + req.params.id)
+        fetch(BACKEND_REFRESH_TOKEN_URL + id)
             .then(response => response.json())
             .then(A_TOKEN => {
                 fetch('https://api.spotify.com/v1/recommendations/available-genre-seeds', {
@@ -35,9 +34,7 @@ router.get('/top/:type/:id', (req, res) => {
                     }
                 })
                     .then(res => res.json())
-                    .then(items => {
-                        res.send(JSON.stringify(items))
-                    })
+                    .then(items => { res.send(JSON.stringify(items)) })
                     .catch(err => res.send(JSON.stringify(err)));
             })
     }
@@ -45,21 +42,20 @@ router.get('/top/:type/:id', (req, res) => {
 
 // get recommendations by seeds
 router.post('/reccomendations/seed/:id', (req, res) => {
+    const { sliders, genres } = req.body.options;
     fetch(BACKEND_REFRESH_TOKEN_URL + req.params.id)
         .then(response => response.json())
         .then(A_TOKEN => {
             let opt = {
-                target_acousticness: req.body.options.sliders.acousticness,
-                target_danceability: req.body.options.sliders.danceability,
-                target_energy: req.body.options.sliders.energy,
-                target_instrumentalness: req.body.options.sliders.instrumentalness,
-                target_liveness: req.body.options.sliders.liveness,
-                target_speechiness: req.body.options.sliders.speechiness,
-                target_valence: req.body.options.sliders.valence
+                target_acousticness: sliders.acousticness,
+                target_danceability: sliders.danceability,
+                target_energy: sliders.energy,
+                target_instrumentalness: sliders.instrumentalness,
+                target_liveness: sliders.liveness,
+                target_speechiness: sliders.speechiness,
+                target_valence: sliders.valence
             }
-            if(req.body.options.genres){
-                opt.seed_genres = req.body.options.genres.join();
-            }
+            if (genres) { opt.seed_genres = genres.join(); }
             fetch('	https://api.spotify.com/v1/recommendations?' + queryString.stringify(opt), {
                 headers: {
                     'Accept': 'application/json',
@@ -68,9 +64,7 @@ router.post('/reccomendations/seed/:id', (req, res) => {
                 }
             })
                 .then(res => res.json())
-                .then(results => {
-                    res.send(JSON.stringify(results))
-                })
+                .then(results => { res.send(JSON.stringify(results)) })
                 .catch(err => res.send(JSON.stringify(err)));
         })
 });
