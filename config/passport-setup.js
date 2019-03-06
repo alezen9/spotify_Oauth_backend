@@ -40,6 +40,19 @@ passport.use(
                         )
                             .then(userResponse => { currentUser.type = profile._json.product; })
                         done(null, currentUser);
+                    }else if (currentUser.refreshToken !== refreshToken) {
+                        // update refresh token
+                        User.updateOne(
+                            { spotifyId: currentUser.spotifyId },
+                            {
+                                $set: {
+                                    refreshToken: refreshToken
+                                },
+                            },
+                            { upsert: true }
+                        )
+                            .then(userResponse => { currentUser.refreshToken = refreshToken; })
+                        done(null, currentUser);
                     }
                     done(null, currentUser);
                 } else {
@@ -50,9 +63,7 @@ passport.use(
                         spotifyId: profile.id,
                         email: profile._json.email,
                         type: profile._json.product,
-                        accessToken: accessToken,
                         refreshToken: refreshToken,
-                        accessTokenUntil: (d.getTime() / 1000) + 3300,
                         country: profile._json.country
                     }).save()
                         .then((newUser) => { done(null, newUser); })

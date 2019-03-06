@@ -6,9 +6,7 @@ const userSchema = new Schema({
     spotifyId: String,
     email: String,
     type: String,
-    accessToken: String,
     refreshToken: String,
-    accessTokenUntil: Number,
     country: String
 });
 

@@ -69,24 +69,10 @@ router.get('/refresh/:id', (req, res) => {
             })
                 .then(resp => resp.json())
                 .then(data => {
-                    // updates db and sends object with new access token that expires in 55 mins
-                    var d = new Date();
-                    User.updateOne(
-                        { spotifyId: req.params.id },
-                        {
-                            $set: {
-                                accessToken: data.access_token,
-                                accessTokenUntil: (d.getTime() / 1000) + 3300
-                            },
-                        },
-                        { upsert: true }
-                    )
-                        .then(userResponse => {
-                            let A_TOKEN = {
-                                access_token: data.access_token
-                            }
-                            res.send(JSON.stringify(A_TOKEN));
-                        })
+                    let A_TOKEN = {
+                        access_token: data.access_token
+                    }
+                    res.send(JSON.stringify(A_TOKEN));
                 })
                 .catch(err => res.send(JSON.stringify(err)))
         })
