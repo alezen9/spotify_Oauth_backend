@@ -2,7 +2,8 @@ module.exports = {
   spotify: {
     clientID: process.env.SPOTIFY_CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
-    b64_CID_CSECRET: process.env.b64_CID_CSECRET
+    b64_CID_CSECRET: process.env.b64_CID_CSECRET,
+    redirectUri: process.env.REDIRECT_URI
   },
   mongoDB: {
     dbURI: process.env.DB_URI
