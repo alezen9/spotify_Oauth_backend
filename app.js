@@ -37,6 +37,8 @@ mongoose.connect(keys.mongoDB.dbURI, { useNewUrlParser: true, dbName: 'intersecD
 app.use('/auth', authRoutes)
 app.use('/api', apiRoutes)
 
-app.listen(5000, () => {
+const port = process.env.PORT || 5000
+
+app.listen(port, () => {
   console.log('app listening for requests on port 5000')
 })
