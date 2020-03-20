@@ -29,7 +29,7 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 // db connection
-mongoose.connect(keys.mongoDB.dbURI, { useNewUrlParser: true, dbName: 'intersecDB' }, () => {
+mongoose.connect(keys.mongoDB.dbURI, { useNewUrlParser: true, dbName: 'intersecDB', useUnifiedTopology: true }, () => {
   console.log('connected to mongodb')
 })
 
