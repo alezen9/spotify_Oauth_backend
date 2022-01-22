@@ -20,7 +20,7 @@
     "ejs": "^2.6.1",
     "express": "^4.16.4",
     "mongoose": "^5.9.5",
-    "node-fetch": "^2.3.0",
+    "node-fetch": "^3.1.1",
     "nodemon": "^2.0.2",
     "passport": "^0.4.0",
     "passport-facebook": "^2.1.1",
